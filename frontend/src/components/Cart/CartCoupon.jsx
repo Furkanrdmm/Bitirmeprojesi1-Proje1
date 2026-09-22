@@ -4,12 +4,16 @@ import { CartContext } from "../../context/CartProvider";
 
 const CartCoupon = () => {
   const [couponCode, setCouponCode] = useState("");
-  const { cartItems, setCartItems } = useContext(CartContext);
+  const { cartItems, setCartItems, appliedCoupon, setAppliedCoupon } =
+    useContext(CartContext);
   const apiUrl = import.meta.env.VITE_API_BASE_URL;
 
   const applyCoupon = async () => {
     if (couponCode.trim().length === 0) {
       return message.warning("Boş değer girilimez.");
+    }
+    if (appliedCoupon) {
+      return message.warning(`${appliedCoupon} kuponu zaten uygulandı.`);
     }
     try {
       const res = await fetch(`${apiUrl}/api/coupons/code/${couponCode}`);
@@ -27,6 +31,7 @@ const CartCoupon = () => {
       });
 
       setCartItems(updatedCartItems);
+      setAppliedCoupon(couponCode);
 
       message.success(`${couponCode} kupon kodu başarıyla uygulandı.`);
     } catch (error) {

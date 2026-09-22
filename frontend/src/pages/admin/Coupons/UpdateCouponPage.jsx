@@ -1,4 +1,5 @@
 import { Button, Form, Input, InputNumber, Spin, message } from "antd";
+import { authHeaders } from "../../../config/auth";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
@@ -14,9 +15,7 @@ const UpdateCouponPage = () => {
     try {
       const response = await fetch(`${apiUrl}/api/coupons/${couponId}`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: authHeaders({ "Content-Type": "application/json" }),
         body: JSON.stringify(values),
       });
 
@@ -37,7 +36,9 @@ const UpdateCouponPage = () => {
       setLoading(true);
 
       try {
-        const response = await fetch(`${apiUrl}/api/coupons/${couponId}`);
+        const response = await fetch(`${apiUrl}/api/coupons/${couponId}`, {
+          headers: authHeaders(),
+        });
 
         if (!response.ok) {
           throw new Error("Verileri getirme hatası");

@@ -1,4 +1,5 @@
 import { Button, Popconfirm, Space, Table, message } from "antd";
+import { authHeaders } from "../../../config/auth";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -29,7 +30,7 @@ const CouponPage = () => {
         <Space>
           <Button
             type="primary"
-            onClick={() => navigate(`/admin/categories/update/${record._id}`)}
+            onClick={() => navigate(`/admin/coupons/update/${record._id}`)}
           >
             Güncelle
           </Button>
@@ -53,7 +54,9 @@ const CouponPage = () => {
     setLoading(true);
 
     try {
-      const response = await fetch(`${apiUrl}/api/coupons`);
+      const response = await fetch(`${apiUrl}/api/coupons`, {
+        headers: authHeaders(),
+      });
 
       if (response.ok) {
         const data = await response.json();
@@ -72,6 +75,7 @@ const CouponPage = () => {
     try {
       const response = await fetch(`${apiUrl}/api/coupons/${couponId}`, {
         method: "DELETE",
+        headers: authHeaders(),
       });
 
       if (response.ok) {

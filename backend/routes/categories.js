@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const Category = require("../models/Category.js");
+const { verifyToken, requireAdmin } = require("../middleware/auth.js");
 
 // Yeni bir kategori oluşturma (Create)
-router.post("/", async (req, res) => {
+router.post("/", verifyToken, requireAdmin, async (req, res) => {
   try {
     const { name, img } = req.body;
 
@@ -49,7 +50,7 @@ router.get("/:categoryId", async (req, res) => {
 });
 
 // Kategori güncelleme (Update)
-router.put("/:categoryId", async (req, res) => {
+router.put("/:categoryId", verifyToken, requireAdmin, async (req, res) => {
   try {
     const categoryId = req.params.categoryId;
     const updates = req.body;
@@ -74,7 +75,7 @@ router.put("/:categoryId", async (req, res) => {
 });
 
 // Kategori silme (Delete)
-router.delete("/:categoryId", async (req, res) => {
+router.delete("/:categoryId", verifyToken, requireAdmin, async (req, res) => {
   try {
     const categoryId = req.params.categoryId;
 

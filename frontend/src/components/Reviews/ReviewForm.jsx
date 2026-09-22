@@ -1,6 +1,7 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 import { message } from "antd";
+import { authHeaders } from "../../config/auth";
 
 const ReviewForm = ({ singleProduct, setSingleProduct }) => {
   const [rating, setRating] = useState(0);
@@ -20,25 +21,24 @@ const ReviewForm = ({ singleProduct, setSingleProduct }) => {
     if (rating === 0) {
       return message.warning("Puan seçiniz!");
     }
+    if (!user) {
+      return message.info("Yorum yapabilmek için giriş yapmalısınız!");
+    }
+
     const formData = {
-      reviews: [
-        ...singleProduct.reviews,
-        {
-          text: review,
-          rating: parseInt(rating),
-          user: user.id || user._id,
-        },
-      ],
+      text: review,
+      rating: parseInt(rating),
     };
 
     try {
-      const res = await fetch(`${apiUrl}/api/products/${singleProduct._id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const res = await fetch(
+        `${apiUrl}/api/products/${singleProduct._id}/reviews`,
+        {
+          method: "POST",
+          headers: authHeaders({ "Content-Type": "application/json" }),
+          body: JSON.stringify(formData),
+        }
+      );
 
       if (!res.ok) {
         message.error("Bir şeyler yanlış gitti.");

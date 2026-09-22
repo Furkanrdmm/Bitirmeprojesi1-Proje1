@@ -9,6 +9,11 @@ const port = 5000;
 
 dotenv.config();
 
+if (!process.env.JWT_SECRET) {
+  console.error("JWT_SECRET is not defined in .env");
+  process.exit(1);
+}
+
 const connect = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);

@@ -1,4 +1,5 @@
 import { Button, Form, Input, InputNumber, Spin, message } from "antd";
+import { authHeaders } from "../../../config/auth";
 import { useState } from "react";
 
 const CreateCouponPage = () => {
@@ -11,9 +12,7 @@ const CreateCouponPage = () => {
     try {
       const response = await fetch(`${apiUrl}/api/coupons`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: authHeaders({ "Content-Type": "application/json" }),
         body: JSON.stringify(values),
       });
 

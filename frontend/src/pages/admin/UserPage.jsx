@@ -1,4 +1,5 @@
 import { Button, Popconfirm, Table, message } from "antd";
+import { authHeaders } from "../../config/auth";
 import { useCallback, useEffect, useState } from "react";
 
 const UserPage = () => {
@@ -62,7 +63,9 @@ const UserPage = () => {
     setLoading(true);
 
     try {
-      const response = await fetch(`${apiUrl}/api/users`);
+      const response = await fetch(`${apiUrl}/api/users`, {
+        headers: authHeaders(),
+      });
 
       if (response.ok) {
         const data = await response.json();
@@ -81,6 +84,7 @@ const UserPage = () => {
     try {
       const response = await fetch(`${apiUrl}/api/users/${userEmail}`, {
         method: "DELETE",
+        headers: authHeaders(),
       });
 
       if (response.ok) {

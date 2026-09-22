@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const Coupon = require("../models/Coupon.js");
+const { verifyToken, requireAdmin } = require("../middleware/auth.js");
 
 // Yeni bir kupon oluşturma (Create)
-router.post("/", async (req, res) => {
+router.post("/", verifyToken, requireAdmin, async (req, res) => {
   try {
     const { code } = req.body;
 
@@ -24,7 +25,7 @@ router.post("/", async (req, res) => {
 });
 
 // Tüm kuponları getirme (Read - All)
-router.get("/", async (req, res) => {
+router.get("/", verifyToken, requireAdmin, async (req, res) => {
   try {
     const coupons = await Coupon.find();
 
@@ -36,7 +37,7 @@ router.get("/", async (req, res) => {
 });
 
 // Belirli bir kuponu getirme (Read - Single by Coupon ID)
-router.get("/:couponId", async (req, res) => {
+router.get("/:couponId", verifyToken, requireAdmin, async (req, res) => {
   try {
     const couponId = req.params.couponId;
 
@@ -72,7 +73,7 @@ router.get("/code/:couponCode", async (req, res) => {
 });
 
 // Kupon güncelleme (Update)
-router.put("/:couponId", async (req, res) => {
+router.put("/:couponId", verifyToken, requireAdmin, async (req, res) => {
   try {
     const couponId = req.params.couponId;
     const updates = req.body;
@@ -95,7 +96,7 @@ router.put("/:couponId", async (req, res) => {
 });
 
 // Kupon silme (Delete)
-router.delete("/:couponId", async (req, res) => {
+router.delete("/:couponId", verifyToken, requireAdmin, async (req, res) => {
   try {
     const couponId = req.params.couponId;
 

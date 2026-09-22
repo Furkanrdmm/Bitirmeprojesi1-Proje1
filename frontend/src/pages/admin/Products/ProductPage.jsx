@@ -1,4 +1,5 @@
 import { Button, Popconfirm, Space, Table, message } from "antd";
+import { authHeaders } from "../../../config/auth";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -71,6 +72,7 @@ const ProductPage = () => {
     try {
       const response = await fetch(`${apiUrl}/api/products/${productId}`, {
         method: "DELETE",
+        headers: authHeaders(),
       });
 
       if (response.ok) {

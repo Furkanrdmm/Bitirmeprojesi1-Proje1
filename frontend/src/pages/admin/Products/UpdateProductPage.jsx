@@ -1,4 +1,5 @@
 import { Button, Form, Input, InputNumber, Select, Spin, message } from "antd";
+import { authHeaders } from "../../../config/auth";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ReactQuill from "react-quill";
@@ -66,9 +67,7 @@ const UpdateProductPage = () => {
     try {
       const response = await fetch(`${apiUrl}/api/products/${productId}`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: authHeaders({ "Content-Type": "application/json" }),
         body: JSON.stringify({
           ...values,
           price: {

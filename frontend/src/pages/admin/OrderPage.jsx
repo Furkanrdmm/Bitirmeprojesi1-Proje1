@@ -1,19 +1,30 @@
 import { Spin, Table, message } from "antd";
+import { authHeaders } from "../../config/auth";
 import { useEffect, useState } from "react";
 
 const OrderPage = () => {
   const [dataSource, setDataSource] = useState([]);
   const [loading, setLoading] = useState(false);
-  const MY_STRIPE_SECRET_KEY = import.meta.env.VITE_API_STRIPE_SECRET_KEY;
+  const apiUrl = import.meta.env.VITE_API_BASE_URL;
 
   const columns = [
     {
       title: "Müşteri Email",
-      dataIndex: "receipt_email",
+      dataIndex: "email",
     },
     {
       title: "Sipariş Fiyatı",
       dataIndex: "amount",
+      render: (amount) => <span>${amount.toFixed(2)}</span>,
+    },
+    {
+      title: "Ödeme Durumu",
+      dataIndex: "status",
+    },
+    {
+      title: "Tarih",
+      dataIndex: "createdAt",
+      render: (date) => new Date(date).toLocaleString("tr-TR"),
     },
   ];
 
@@ -22,18 +33,12 @@ const OrderPage = () => {
       setLoading(true);
 
       try {
-        const response = await fetch(
-          `https://api.stripe.com/v1/payment_intents`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${MY_STRIPE_SECRET_KEY}`,
-            },
-          }
-        );
+        const response = await fetch(`${apiUrl}/api/payment/orders`, {
+          headers: authHeaders(),
+        });
 
         if (response.ok) {
-          const { data } = await response.json();
+          const data = await response.json();
           setDataSource(data);
         } else {
           message.error("Veri getirme başarısız.");
@@ -45,9 +50,7 @@ const OrderPage = () => {
       }
     };
     fetchData();
-  }, [MY_STRIPE_SECRET_KEY]);
-
-  console.log(dataSource);
+  }, [apiUrl]);
 
   return (
     <Spin spinning={loading}>

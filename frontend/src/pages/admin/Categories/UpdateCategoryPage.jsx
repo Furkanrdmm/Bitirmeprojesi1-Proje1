@@ -1,4 +1,5 @@
 import { Button, Form, Input, Spin, message } from "antd";
+import { authHeaders } from "../../../config/auth";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
@@ -14,9 +15,7 @@ const UpdateCategoryPage = () => {
     try {
       const response = await fetch(`${apiUrl}/api/categories/${categoryId}`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: authHeaders({ "Content-Type": "application/json" }),
         body: JSON.stringify(values),
       });
 

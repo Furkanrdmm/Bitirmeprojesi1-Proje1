@@ -2,6 +2,17 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const User = require("../models/User.js");
+const { generateToken } = require("../middleware/auth.js");
+
+// İstemciye dönecek kullanıcı bilgisi (şifre hash'i hariç)
+const toAuthResponse = (user) => ({
+  id: user._id,
+  email: user.email,
+  username: user.username,
+  role: user.role,
+  avatar: user.avatar,
+  token: generateToken(user),
+});
 
 const generateRandomAvatar = () => {
   const randomAvatar = Math.floor(Math.random() * 71);
@@ -13,6 +24,10 @@ router.post("/register", async (req, res) => {
   try {
     const { username, email, password } = req.body;
     const defaultAvatar = generateRandomAvatar();
+
+    if (!username || !email || !password) {
+      return res.status(400).json({ error: "All fields are required." });
+    }
 
     const existingUser = await User.findOne({ email });
 
@@ -33,7 +48,7 @@ router.post("/register", async (req, res) => {
 
     await newUser.save();
 
-    res.status(201).json(newUser);
+    res.status(201).json(toAuthResponse(newUser));
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Server error." });
@@ -45,25 +60,14 @@ router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).select("+password");
 
-    if (!user) {
-      return res.status(401).json({ error: "Invalid email." });
+    // E-posta mı şifre mi yanlış, saldırgana belli etmemek için tek mesaj
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+      return res.status(401).json({ error: "Invalid email or password." });
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-
-    if (!isPasswordValid) {
-      return res.status(401).json({ error: "Invalid password." });
-    }
-
-    res.status(200).json({
-      id: user._id,
-      email: user.email,
-      username: user.username,
-      role: user.role,
-      avatar: user.avatar,
-    });
+    res.status(200).json(toAuthResponse(user));
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Server error." });

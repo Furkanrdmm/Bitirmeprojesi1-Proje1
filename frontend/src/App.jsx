@@ -9,16 +9,16 @@ import ProductDetailsPage from "./pages/ProductDetailsPage";
 import BlogDetailsPage from "./pages/BlogDetailsPage";
 
 import "./App.css";
-import UserPage from "./pages/Admin/UserPage";
-import CategoryPage from "./pages/Admin/Categories/CategoryPage";
-import UpdateCategoryPage from "./pages/Admin/Categories/UpdateCategoryPage";
-import CreateCategoryPage from "./pages/Admin/Categories/CreateCategoryPage";
-import CreateProductPage from "./pages/Admin/Products/CreateProductPage";
-import ProductPage from "./pages/Admin/Products/ProductPage";
-import UpdateProductPage from "./pages/Admin/Products/UpdateProductPage";
-import CouponPage from "./pages/Admin/Coupons/CouponPage";
-import CreateCouponPage from "./pages/Admin/Coupons/CreateCouponPage";
-import UpdateCouponPage from "./pages/Admin/Coupons/UpdateCouponPage";
+import UserPage from "./pages/admin/UserPage";
+import CategoryPage from "./pages/admin/Categories/CategoryPage";
+import UpdateCategoryPage from "./pages/admin/Categories/UpdateCategoryPage";
+import CreateCategoryPage from "./pages/admin/Categories/CreateCategoryPage";
+import CreateProductPage from "./pages/admin/Products/CreateProductPage";
+import ProductPage from "./pages/admin/Products/ProductPage";
+import UpdateProductPage from "./pages/admin/Products/UpdateProductPage";
+import CouponPage from "./pages/admin/Coupons/CouponPage";
+import CreateCouponPage from "./pages/admin/Coupons/CreateCouponPage";
+import UpdateCouponPage from "./pages/admin/Coupons/UpdateCouponPage";
 import Success from "./pages/Success";
 import OrderPage from "./pages/admin/OrderPage";
 

@@ -10,9 +10,20 @@ const CartProvider = ({ children }) => {
       : []
   );
 
+  const [appliedCoupon, setAppliedCoupon] = useState(
+    localStorage.getItem("appliedCoupon") || null
+  );
+
   useEffect(() => {
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    if (cartItems.length === 0) setAppliedCoupon(null);
   }, [cartItems]);
+
+  useEffect(() => {
+    appliedCoupon
+      ? localStorage.setItem("appliedCoupon", appliedCoupon)
+      : localStorage.removeItem("appliedCoupon");
+  }, [appliedCoupon]);
 
   const addToCart = (cartItem) => {
     // setCartItems([...cartItems, cartItem]); 1. yol
@@ -40,6 +51,8 @@ const CartProvider = ({ children }) => {
         setCartItems,
         addToCart,
         removeFromCart,
+        appliedCoupon,
+        setAppliedCoupon,
       }}
     >
       {children}

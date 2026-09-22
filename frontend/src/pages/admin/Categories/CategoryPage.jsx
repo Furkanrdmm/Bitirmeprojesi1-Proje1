@@ -1,4 +1,5 @@
 import { Button, Popconfirm, Space, Table, message } from "antd";
+import { authHeaders } from "../../../config/auth";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -72,6 +73,7 @@ const CategoryPage = () => {
     try {
       const response = await fetch(`${apiUrl}/api/categories/${categoryId}`, {
         method: "DELETE",
+        headers: authHeaders(),
       });
 
       if (response.ok) {

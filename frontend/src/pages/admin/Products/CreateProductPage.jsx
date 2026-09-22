@@ -1,4 +1,5 @@
 import { Button, Form, Input, InputNumber, Select, Spin, message } from "antd";
+import { authHeaders } from "../../../config/auth";
 import { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
@@ -40,9 +41,7 @@ const CreateProductPage = () => {
     try {
       const response = await fetch(`${apiUrl}/api/products`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: authHeaders({ "Content-Type": "application/json" }),
         body: JSON.stringify({
           ...values,
           price: {

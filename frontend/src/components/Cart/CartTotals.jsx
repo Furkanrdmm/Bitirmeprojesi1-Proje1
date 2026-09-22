@@ -2,11 +2,12 @@ import { useContext, useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { CartContext } from "../../context/CartProvider";
 import { Spin, message } from "antd";
+import { authHeaders } from "../../config/auth";
 
 const CartTotals = () => {
   const [fastCargoChecked, setFastCargoChecked] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { cartItems } = useContext(CartContext);
+  const { cartItems, appliedCoupon } = useContext(CartContext);
   const stripePublicKey = import.meta.env.VITE_API_STRIPE_PUBLIC_KEY;
   const apiUrl = import.meta.env.VITE_API_BASE_URL;
   const user = localStorage.getItem("user")
@@ -30,15 +31,19 @@ const CartTotals = () => {
     : subTotals.toFixed(2);
 
   const handlePayment = async () => {
-    setLoading(true);
     if (!user) {
       return message.info("Ödeme yapabilmek için giriş yapmalısınız!");
     }
+    setLoading(true);
 
+    // Fiyatlar sunucuda hesaplanır; sadece ürün, adet ve kupon gönderilir
     const body = {
-      products: cartItems,
-      user: user,
-      cargoFee: fastCargoChecked ? cargoFee : 0,
+      items: cartItems.map((item) => ({
+        id: item._id,
+        quantity: item.quantity,
+      })),
+      couponCode: appliedCoupon,
+      fastCargo: fastCargoChecked,
     };
 
     try {
@@ -46,7 +51,7 @@ const CartTotals = () => {
 
       const res = await fetch(`${apiUrl}/api/payment`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: authHeaders({ "Content-Type": "application/json" }),
         body: JSON.stringify(body),
       });
 

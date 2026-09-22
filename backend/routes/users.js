@@ -1,6 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/User.js");
+const { verifyToken, requireAdmin } = require("../middleware/auth.js");
+
+// Bu dosyadaki tüm işlemler sadece admin içindir
+router.use(verifyToken, requireAdmin);
 
 // Tüm kullanıcıları getirme (Read - All)
 router.get("/", async (req, res) => {
