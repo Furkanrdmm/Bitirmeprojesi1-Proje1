@@ -24,7 +24,7 @@ const Search = ({ isSearchShow, setIsSearchShow }) => {
 
     try {
       const res = await fetch(
-        `${apiUrl}/api/products/search/${productName.trim()}`
+        `${apiUrl}/api/products/search/${encodeURIComponent(productName.trim())}`
       );
 
       if (!res.ok) {

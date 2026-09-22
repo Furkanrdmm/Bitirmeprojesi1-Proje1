@@ -28,6 +28,22 @@ router.get("/", async (req, res) => {
   }
 });
 
+// Ürün adına göre arama (büyük/küçük harf duyarsız)
+router.get("/search/:productName", async (req, res) => {
+  try {
+    // Kullanıcı girdisindeki özel regex karakterlerini etkisizleştir
+    const escaped = req.params.productName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const products = await Product.find({
+      name: { $regex: escaped, $options: "i" },
+    });
+
+    res.status(200).json(products);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Server error." });
+  }
+});
+
 // Belirli bir ürünü getirme (Read - Single)
 router.get("/:productId", async (req, res) => {
   try {
