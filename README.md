@@ -74,8 +74,8 @@ MongoDB, Express, React ve Node.js ile geliştirilmiş, Stripe ödeme entegrasyo
 
 ### 1. Projeyi klonlayın
 ```bash
-git clone https://github.com/Furkanrdmm/Bitirmeprojesi1-Proje1.git
-cd Bitirmeprojesi1-Proje1
+git clone https://github.com/Furkanrdmm/mern-e-ticaret.git
+cd mern-e-ticaret
 ```
 
 ### 2. Backend
